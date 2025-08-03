@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import sys
+import re
 
 
 PATH = r"C:\Program Files (x86)\chromedriver.exe"
@@ -30,8 +31,13 @@ except:
 houses = container.find_elements(By.CSS_SELECTOR, ".listing-card-container.col-12")
 
 for house in houses:
-    price = house.find_element(By.CSS_SELECTOR, ".listing-card__price.d-inline-block").text
-    print(f"Price: {price}")
+    price = house.find_element(By.CSS_SELECTOR, ".listing-card__price.d-inline-block")
+    
+    match = re.search(r'>([^<]+)<', price.get_attribute("outerHTML"))
+
+    if match:
+        price_text = match.group(1).strip()
+        print(f"Price: {price_text}")
 
 input("Press Enter to close the browser...")
 driver.quit()
