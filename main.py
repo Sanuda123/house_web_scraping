@@ -3,7 +3,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
 import sys
 import re
 
@@ -11,14 +10,16 @@ import re
 PATH = r"C:\Program Files (x86)\chromedriver.exe"
 service = Service(PATH)
 driver = webdriver.Chrome(service=service)
-time.sleep(3)  # Wait for the browser to open
 
 # city = input("Enter the city name: ")
 # driver.get("https://rentals.ca/van" + city)
 
 driver.get("https://rentals.ca/vancouver")
 
+driver.implicitly_wait(10)
+
 try: 
+
     container = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, ".page-search-results__list.d-none.d-lg-block"))
     )
@@ -38,6 +39,8 @@ for house in houses:
     if match:
         price_text = match.group(1).strip()
         print(f"Price: {price_text}")
+        print(f"Price: {price.text}")
+
 
 input("Press Enter to close the browser...")
 driver.quit()
